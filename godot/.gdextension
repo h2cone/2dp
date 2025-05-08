@@ -1,0 +1,14 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.1
+reloadable = true
+
+[libraries]
+linux.debug.x86_64 =     "res://../rust/target/debug/libcrate.so"
+linux.release.x86_64 =   "res://../rust/target/release/libcrate.so"
+windows.debug.x86_64 =   "res://../rust/target/debug/crate.dll"
+windows.release.x86_64 = "res://../rust/target/release/crate.dll"
+macos.debug =            "res://../rust/target/debug/libcrate.dylib"
+macos.release =          "res://../rust/target/release/libcrate.dylib"
+macos.debug.arm64 =      "res://../rust/target/debug/libcrate.dylib"
+macos.release.arm64 =    "res://../rust/target/release/libcrate.dylib"
