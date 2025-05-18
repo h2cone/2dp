@@ -16,9 +16,5 @@ impl INode for Game {
         godot_print!("Game ready");
     }
 
-    fn unhandled_input(&mut self, event: Gd<InputEvent>) {
-        if event.is_action_pressed("ui_right") {
-            godot_print!("Right key pressed");
-        }
-    }
+    fn unhandled_input(&mut self, _event: Gd<InputEvent>) {}
 }

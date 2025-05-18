@@ -1,7 +1,8 @@
 use godot::prelude::*;
 
 mod game;
-mod level;
+mod levels;
+mod player;
 
 struct MyExtension;
 
