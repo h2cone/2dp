@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://2jxqdpgcgqf4"]
+[gd_scene load_steps=3 format=3 uid="uid://2jxqdpgcgqf4"]
+
+[ext_resource type="Texture2D" uid="uid://bciy2siydif6w" path="res://player/robot.webp" id="1_oul6g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kqu6x"]
 
@@ -7,4 +9,16 @@
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_kqu6x")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(0, -28)
+offset = Vector2(0, 50)
+limit_left = -715
+limit_top = -250
+limit_right = 1425
+limit_bottom = 690
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_oul6g")
+hframes = 8
+vframes = 8
+frame = 42

@@ -1,4 +1,4 @@
-use godot::prelude::*;
+use godot::{classes::Camera2D, prelude::*};
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
@@ -15,7 +15,11 @@ impl INode2D for Level00 {
     fn ready(&mut self) {
         self.base().get_children().iter_shared().for_each(|child| {
             if child.is_class("Player") {
-                godot_print!("Player found");
+                let mut camera = child.get_node_as::<Camera2D>("Camera");
+                camera.set_limit(Side::LEFT, -315);
+                camera.set_limit(Side::TOP, -250);
+                camera.set_limit(Side::RIGHT, 955);
+                camera.set_limit(Side::BOTTOM, 690);
             }
         });
     }

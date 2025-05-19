@@ -65,9 +65,29 @@ function Restart-Godot {
     Start-Sleep -Seconds 2
     
     Write-Host "Building Rust project..."
-    Start-Process -FilePath "cargo" -ArgumentList "build", "--manifest-path", "./rust/Cargo.toml" -Wait -NoNewWindow
-    
-    return Start-Godot
+    try {
+        $buildProcess = Start-Process -FilePath "cargo" -ArgumentList "build", "--manifest-path", "./rust/Cargo.toml" -Wait -NoNewWindow -PassThru
+        
+        Write-Host "Cargo build process completed with exit code: $($buildProcess.ExitCode)"
+        
+        if ($buildProcess.ExitCode -ne 0) {
+            Write-Host "Rust build failed with exit code: $($buildProcess.ExitCode)"
+            return $null
+        }
+        
+        Write-Host "Rust build completed successfully. Starting Godot..."
+        $godotProcess = Start-Godot
+        if ($godotProcess) {
+            Write-Host "Godot started successfully after restart"
+        } else {
+            Write-Host "Failed to start Godot after restart"
+        }
+        return $godotProcess
+    }
+    catch {
+        Write-Host "Error during restart process: $_"
+        return $null
+    }
 }
 
 switch ($Command) {
