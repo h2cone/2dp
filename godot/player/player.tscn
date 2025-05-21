@@ -3,10 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://bciy2siydif6w" path="res://player/robot.webp" id="1_oul6g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kqu6x"]
+size = Vector2(38, 46)
 
 [node name="Player" type="Player"]
+collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_kqu6x")
 
 [node name="Camera" type="Camera2D" parent="."]

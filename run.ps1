@@ -14,26 +14,34 @@ $ProcessInfoFile = "godot_process.txt"
 
 function Start-Godot {
     Write-Host "Attempting to start Godot project: $ProjectPath"
+    Write-Host "Using Godot executable: $GodotExecutable"
+    Write-Host "Arguments: $($Arguments -join ' ')"
     
-    $godotProcess = Start-Process -FilePath $GodotExecutable -ArgumentList $Arguments -PassThru
-    
-    if ($godotProcess) {
-        $processId = $godotProcess.Id
-        Write-Host "Godot process started successfully."
-        Write-Host "Process Name: $($godotProcess.ProcessName)"
-        Write-Host "Process ID (PID): $processId"
-        Write-Host "Command Line: $($godotProcess.CommandLine)"
+    try {
+        $godotProcess = Start-Process -FilePath $GodotExecutable -ArgumentList $Arguments -PassThru
         
-        @{
-            ProcessId = $processId
-            StartTime = Get-Date
-        } | ConvertTo-Json | Out-File -FilePath $ProcessInfoFile
-        
-        return $godotProcess
+        if ($godotProcess) {
+            $processId = $godotProcess.Id
+            Write-Host "Godot process started successfully."
+            Write-Host "Process Name: $($godotProcess.ProcessName)"
+            Write-Host "Process ID (PID): $processId"
+            Write-Host "Command Line: $($godotProcess.CommandLine)"
+            
+            @{
+                ProcessId = $processId
+                StartTime = Get-Date
+            } | ConvertTo-Json | Out-File -FilePath $ProcessInfoFile
+            
+            return $godotProcess
+        }
+        else {
+            Write-Host "Failed to start the Godot process using Start-Process."
+            Write-Host "Please check the Godot executable path and the project path."
+            return $null
+        }
     }
-    else {
-        Write-Host "Failed to start the Godot process using Start-Process."
-        Write-Host "Please check the Godot executable path and the project path."
+    catch {
+        Write-Host "Error starting Godot: $_"
         return $null
     }
 }

@@ -1,5 +1,5 @@
 use godot::{
-    classes::{CharacterBody2D, ICharacterBody2D, Input},
+    classes::{CharacterBody2D, ICharacterBody2D, ProjectSettings},
     prelude::*,
 };
 
@@ -7,25 +7,24 @@ use godot::{
 #[class(base=CharacterBody2D)]
 pub struct Player {
     base: Base<CharacterBody2D>,
+    gravity: f64,
 }
 
 #[godot_api]
 impl ICharacterBody2D for Player {
     fn init(base: Base<CharacterBody2D>) -> Self {
-        Self { base }
+        Self { base, gravity: 0.0 }
     }
 
     fn ready(&mut self) {
-        godot_print!("Player ready");
+        let settings = ProjectSettings::singleton();
+        self.gravity = settings.get("physics/2d/default_gravity").to::<f64>();
     }
 
-    fn physics_process(&mut self, _delta: f64) {
-        let input = Input::singleton();
-        if input.is_action_just_pressed("ui_right") {
-            godot_print!("Right key pressed");
-        }
-        if input.is_action_just_pressed("ui_left") {
-            godot_print!("Left key pressed");
-        }
+    fn physics_process(&mut self, delta: f64) {
+        let mut velocity = self.base().get_velocity();
+        velocity.y += self.gravity as f32 * delta as f32;
+        self.base_mut().set_velocity(velocity);
+        self.base_mut().move_and_slide();
     }
 }
