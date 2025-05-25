@@ -18,7 +18,7 @@ function Start-Godot {
     Write-Host "Arguments: $($Arguments -join ' ')"
     
     try {
-        $godotProcess = Start-Process -FilePath $GodotExecutable -ArgumentList $Arguments -PassThru
+        $godotProcess = Start-Process -FilePath $GodotExecutable -ArgumentList $Arguments -PassThru -NoNewWindow
         
         if ($godotProcess) {
             $processId = $godotProcess.Id
@@ -70,7 +70,6 @@ function Stop-Godot {
 
 function Restart-Godot {
     Stop-Godot
-    Start-Sleep -Seconds 2
     
     Write-Host "Building Rust project..."
     try {
@@ -87,7 +86,8 @@ function Restart-Godot {
         $godotProcess = Start-Godot
         if ($godotProcess) {
             Write-Host "Godot started successfully after restart"
-        } else {
+        }
+        else {
             Write-Host "Failed to start Godot after restart"
         }
         return $godotProcess
