@@ -5,12 +5,12 @@ use godot::{
     prelude::*,
 };
 
-const WALK_SPEED: f32 = 300.0;
-
 enum State {
     Air,
     Floor,
 }
+
+const WALK_SPEED: f32 = 300.0;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody2D)]
@@ -45,13 +45,14 @@ impl ICharacterBody2D for Player {
 
         match self.state {
             State::Air => {
-                self.movement(&mut velocity);
                 if self.base().is_on_floor() {
                     self.state = State::Floor;
+                    return;
                 }
+                self.walk(&mut velocity);
             }
             State::Floor => {
-                self.movement(&mut velocity);
+                self.walk(&mut velocity);
             }
         }
 
@@ -76,7 +77,7 @@ impl ICharacterBody2D for Player {
 }
 
 impl Player {
-    fn movement(&mut self, velocity: &mut Vector2) {
+    fn walk(&mut self, velocity: &mut Vector2) {
         let input = Input::singleton();
         if input.is_action_pressed("ui_right") {
             velocity.x = WALK_SPEED;
