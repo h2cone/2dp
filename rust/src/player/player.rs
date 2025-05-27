@@ -13,6 +13,7 @@ enum State {
 
 const WALK_SPEED: f32 = 300.0;
 const ACCELERATION_SPEED: f32 = WALK_SPEED * 6.0;
+const JUMP_VELOCITY: f32 = -339.0;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody2D)]
@@ -51,10 +52,13 @@ impl ICharacterBody2D for Player {
                     self.state = State::Floor;
                     return;
                 }
-                self.walk(&mut velocity, delta);
+                self.try_walk(&mut velocity, delta);
             }
             State::Floor => {
-                self.walk(&mut velocity, delta);
+                self.try_walk(&mut velocity, delta);
+                if self.try_jump(&mut velocity) {
+                    self.state = State::Air;
+                }
             }
         }
 
@@ -79,7 +83,7 @@ impl ICharacterBody2D for Player {
 }
 
 impl Player {
-    fn walk(&mut self, velocity: &mut Vector2, delta: f64) {
+    fn try_walk(&mut self, velocity: &mut Vector2, delta: f64) {
         let input = Input::singleton();
         let direction = input.get_axis("ui_left", "ui_right");
         velocity.x = global::move_toward(
@@ -87,6 +91,15 @@ impl Player {
             (direction * WALK_SPEED) as f64,
             ACCELERATION_SPEED as f64 * delta,
         ) as f32;
+    }
+
+    fn try_jump(&mut self, velocity: &mut Vector2) -> bool {
+        let input = Input::singleton();
+        if input.is_action_just_pressed("ui_up") {
+            velocity.y = JUMP_VELOCITY;
+            return true;
+        }
+        false
     }
 
     fn get_new_animation(&self) -> GString {
