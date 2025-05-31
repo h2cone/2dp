@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://2jxqdpgcgqf4"]
+[gd_scene load_steps=9 format=3 uid="uid://2jxqdpgcgqf4"]
 
 [ext_resource type="Texture2D" uid="uid://bciy2siydif6w" path="res://player/robot.webp" id="1_oul6g"]
+[ext_resource type="AudioStream" uid="uid://dnhogvuv1kbre" path="res://player/jump.wav" id="2_rkbax"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kqu6x"]
 size = Vector2(50, 61)
@@ -39,6 +40,23 @@ tracks/0/keys = {
 "values": [30, 31, 32, 33]
 }
 
+[sub_resource type="Animation" id="Animation_oul6g"]
+resource_name = "jumping"
+length = 0.5
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [45]
+}
+
 [sub_resource type="Animation" id="Animation_yw30f"]
 resource_name = "run"
 length = 0.6
@@ -55,23 +73,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-}
-
-[sub_resource type="Animation" id="Animation_oul6g"]
-resource_name = "jumping"
-length = 0.5
-step = 0.25
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [45]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rkbax"]
@@ -103,9 +104,16 @@ position = Vector2(0, -14)
 texture = ExtResource("1_oul6g")
 hframes = 8
 vframes = 8
-frame = 45
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_rkbax")
 }
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_rkbax")
+volume_db = -3.0
+
+[node name="PlatformDetector" type="RayCast2D" parent="."]
+target_position = Vector2(0, 6)
+collision_mask = 8
