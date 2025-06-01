@@ -1,11 +1,13 @@
 use godot::{
     classes::{
         AnimationPlayer, AudioStreamPlayer2D, CharacterBody2D, ICharacterBody2D, Input,
-        ProjectSettings, RayCast2D, Sprite2D,
+        ProjectSettings, RayCast2D, Sprite2D, Timer,
     },
     global,
     prelude::*,
 };
+
+use super::gun::Gun;
 
 enum State {
     Air,
@@ -27,6 +29,8 @@ pub struct Player {
     jump_sound: OnReady<Gd<AudioStreamPlayer2D>>,
     platform_detector: OnReady<Gd<RayCast2D>>,
     double_jump_charged: bool,
+    gun: OnReady<Gd<Gun>>,
+    shot_timer: OnReady<Gd<Timer>>,
 }
 
 #[godot_api]
@@ -41,6 +45,8 @@ impl ICharacterBody2D for Player {
             jump_sound: OnReady::from_node("JumpSound"),
             platform_detector: OnReady::from_node("PlatformDetector"),
             double_jump_charged: false,
+            gun: OnReady::from_node("Sprite2D/Gun"),
+            shot_timer: OnReady::from_node("ShootTimer"),
         }
     }
 
@@ -50,9 +56,10 @@ impl ICharacterBody2D for Player {
     }
 
     fn physics_process(&mut self, delta: f64) {
+        // Apply gravity
         let mut velocity = self.base().get_velocity();
         velocity.y += self.gravity as f32 * delta as f32;
-
+        // State machine
         match self.state {
             State::Air => {
                 if self.base().is_on_floor() {
@@ -70,12 +77,12 @@ impl ICharacterBody2D for Player {
                 }
             }
         }
-
+        // Move and slide
         self.base_mut().set_velocity(velocity);
         let detected = self.platform_detector.is_colliding();
         self.base_mut().set_floor_stop_on_slope_enabled(!detected);
         self.base_mut().move_and_slide();
-
+        // Flip
         if !self.base().get_velocity().x.is_zero_approx() {
             let mut scale = self.sprite.get_scale();
             if self.base().get_velocity().x > 0. {
@@ -85,8 +92,19 @@ impl ICharacterBody2D for Player {
             }
             self.sprite.set_scale(scale);
         }
-        let animation = self.get_new_animation();
-        if animation != self.animation_player.get_current_animation() {
+        // Action
+        let mut is_shooting = false;
+        if Input::singleton().is_action_just_pressed("shoot") {
+            is_shooting = self.gun.bind().try_shoot(self.sprite.get_scale().x);
+        }
+        // Play animation
+        let animation = self.get_new_animation(is_shooting);
+        // Will not be interrupted by other actions
+        let is_shot_timer_stopped = self.shot_timer.is_stopped();
+        if animation != self.animation_player.get_current_animation() && is_shot_timer_stopped {
+            if is_shooting {
+                self.shot_timer.start();
+            }
             self.animation_player.set_current_animation(&animation);
             self.animation_player.play();
         }
@@ -96,7 +114,7 @@ impl ICharacterBody2D for Player {
 impl Player {
     fn try_walk(&mut self, velocity: &mut Vector2, delta: f64) {
         let input = Input::singleton();
-        let direction = input.get_axis("ui_left", "ui_right");
+        let direction = input.get_axis("move_left", "move_right");
         velocity.x = global::move_toward(
             velocity.x as f64,
             (direction * WALK_SPEED) as f64,
@@ -106,7 +124,7 @@ impl Player {
 
     fn try_jump(&mut self, velocity: &mut Vector2) -> bool {
         let input = Input::singleton();
-        if input.is_action_just_pressed("ui_up") {
+        if input.is_action_just_pressed("jump") {
             if self.base().is_on_floor() {
                 velocity.y = JUMP_VELOCITY;
                 self.jump_sound.set_pitch_scale(1.);
@@ -123,19 +141,23 @@ impl Player {
         false
     }
 
-    fn get_new_animation(&self) -> GString {
-        if self.base().is_on_floor() {
-            return if self.base().get_velocity().abs().x > 0.1 {
-                GString::from("run")
+    fn get_new_animation(&self, is_shooting: bool) -> GString {
+        let mut animation = if self.base().is_on_floor() {
+            if self.base().get_velocity().abs().x > 0.1 {
+                "run".to_string()
             } else {
-                GString::from("idle")
-            };
+                "idle".to_string()
+            }
         } else {
-            return if self.base().get_velocity().y > 0. {
-                GString::from("falling")
+            if self.base().get_velocity().y > 0. {
+                "falling".to_string()
             } else {
-                GString::from("jumping")
-            };
+                "jumping".to_string()
+            }
+        };
+        if is_shooting {
+            animation = animation + "_weapon";
         }
+        GString::from(animation)
     }
 }

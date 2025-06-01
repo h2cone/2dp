@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://2jxqdpgcgqf4"]
+[gd_scene load_steps=14 format=3 uid="uid://2jxqdpgcgqf4"]
 
 [ext_resource type="Texture2D" uid="uid://bciy2siydif6w" path="res://player/robot.webp" id="1_oul6g"]
 [ext_resource type="AudioStream" uid="uid://dnhogvuv1kbre" path="res://player/jump.wav" id="2_rkbax"]
@@ -75,12 +75,99 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
+[sub_resource type="Animation" id="Animation_rkbax"]
+resource_name = "idle_weapon"
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [35, 36, 37, 38]
+}
+
+[sub_resource type="Animation" id="Animation_g6k8r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [35]
+}
+
+[sub_resource type="Animation" id="Animation_boad6"]
+resource_name = "jumping_weapon"
+length = 0.5
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [46]
+}
+
+[sub_resource type="Animation" id="Animation_rgyib"]
+resource_name = "run_weapon"
+length = 0.6
+step = 0.06
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.18, 0.24, 0.3, 0.36, 0.42, 0.48, 0.54, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 29]
+}
+
+[sub_resource type="Animation" id="Animation_hg6s5"]
+resource_name = "falling_weapon"
+length = 0.5
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [26]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rkbax"]
 _data = {
+&"RESET": SubResource("Animation_g6k8r"),
 &"falling": SubResource("Animation_g1dw6"),
+&"falling_weapon": SubResource("Animation_hg6s5"),
 &"idle": SubResource("Animation_qjkh3"),
+&"idle_weapon": SubResource("Animation_rkbax"),
 &"jumping": SubResource("Animation_oul6g"),
-&"run": SubResource("Animation_yw30f")
+&"jumping_weapon": SubResource("Animation_boad6"),
+&"run": SubResource("Animation_yw30f"),
+&"run_weapon": SubResource("Animation_rgyib")
 }
 
 [node name="Player" type="Player"]
@@ -104,6 +191,10 @@ position = Vector2(0, -14)
 texture = ExtResource("1_oul6g")
 hframes = 8
 vframes = 8
+frame = 35
+
+[node name="Gun" type="Gun" parent="Sprite2D"]
+position = Vector2(14, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -117,3 +208,7 @@ volume_db = -3.0
 [node name="PlatformDetector" type="RayCast2D" parent="."]
 target_position = Vector2(0, 6)
 collision_mask = 8
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
