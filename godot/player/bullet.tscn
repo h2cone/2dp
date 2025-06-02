@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://kc383ivgnl4h"]
+
+[ext_resource type="Texture2D" uid="uid://b6uheykwigo6o" path="res://player/bullet.webp" id="1_1y6ct"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_j40gx"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1y6ct"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_boyjm"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_1y6ct"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_j40gx"]
+gradient = SubResource("Gradient_1y6ct")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0.01)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_42du2"]
+blend_mode = 1
+
+[node name="Bullet" type="Bullet"]
+z_index = 5
+material = SubResource("CanvasItemMaterial_j40gx")
+collision_layer = 0
+collision_mask = 26
+mass = 0.028
+gravity_scale = 0.1
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_1y6ct")
+texture = ExtResource("1_1y6ct")
+
+[node name="Glow" type="Sprite2D" parent="Sprite2D"]
+modulate = Color(0.501961, 1, 1, 0.25098)
+material = SubResource("CanvasItemMaterial_boyjm")
+scale = Vector2(0.667, 0.667)
+texture = SubResource("GradientTexture2D_j40gx")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_42du2")
+emitting = false
+texture = ExtResource("1_1y6ct")
+lifetime = 0.1
+speed_scale = 3.0
+spread = 0.0
+gravity = Vector2(0, 0)
+color = Color(1, 1, 1, 0.705882)
