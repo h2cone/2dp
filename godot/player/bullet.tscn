@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://kc383ivgnl4h"]
+[gd_scene load_steps=12 format=3 uid="uid://kc383ivgnl4h"]
 
 [ext_resource type="Texture2D" uid="uid://b6uheykwigo6o" path="res://player/bullet.webp" id="1_1y6ct"]
 
@@ -22,6 +22,85 @@ fill_to = Vector2(0.5, 0.01)
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_42du2"]
 blend_mode = 1
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_1y6ct"]
+radius = 8.0
+
+[sub_resource type="Animation" id="Animation_j40gx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CPUParticles2D:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1y6ct"]
+resource_name = "destroy"
+length = 0.3
+step = 0.033
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(1.03333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CPUParticles2D:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j40gx"]
+_data = {
+&"RESET": SubResource("Animation_j40gx"),
+&"destroy": SubResource("Animation_1y6ct")
+}
+
 [node name="Bullet" type="Bullet"]
 z_index = 5
 material = SubResource("CanvasItemMaterial_j40gx")
@@ -44,7 +123,6 @@ scale = Vector2(0.667, 0.667)
 texture = SubResource("GradientTexture2D_j40gx")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-self_modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_42du2")
 emitting = false
 texture = ExtResource("1_1y6ct")
@@ -53,3 +131,15 @@ speed_scale = 3.0
 spread = 0.0
 gravity = Vector2(0, 0)
 color = Color(1, 1, 1, 0.705882)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1y6ct")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_j40gx")
+}
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
