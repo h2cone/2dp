@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://2jxqdpgcgqf4"]
+[gd_scene load_steps=15 format=3 uid="uid://2jxqdpgcgqf4"]
 
 [ext_resource type="Texture2D" uid="uid://bciy2siydif6w" path="res://player/robot.webp" id="1_oul6g"]
+[ext_resource type="AudioStream" uid="uid://bbv2560tbescs" path="res://player/shoot.wav" id="2_g1dw6"]
 [ext_resource type="AudioStream" uid="uid://dnhogvuv1kbre" path="res://player/jump.wav" id="2_rkbax"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kqu6x"]
@@ -196,6 +197,14 @@ frame = 35
 [node name="Gun" type="Gun" parent="Sprite2D"]
 position = Vector2(14, 0)
 
+[node name="Cooldown" type="Timer" parent="Sprite2D/Gun"]
+wait_time = 0.3
+one_shot = true
+
+[node name="ShootSound" type="AudioStreamPlayer2D" parent="Sprite2D/Gun"]
+position = Vector2(-30.659, -6.132)
+stream = ExtResource("2_g1dw6")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_rkbax")
@@ -209,6 +218,6 @@ volume_db = -3.0
 target_position = Vector2(0, 6)
 collision_mask = 8
 
-[node name="ShootTimer" type="Timer" parent="."]
+[node name="ShotAnimation" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true

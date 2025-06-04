@@ -30,7 +30,7 @@ pub struct Player {
     platform_detector: OnReady<Gd<RayCast2D>>,
     double_jump_charged: bool,
     gun: OnReady<Gd<Gun>>,
-    shot_timer: OnReady<Gd<Timer>>,
+    shot_animation: OnReady<Gd<Timer>>,
 }
 
 #[godot_api]
@@ -46,7 +46,7 @@ impl ICharacterBody2D for Player {
             platform_detector: OnReady::from_node("PlatformDetector"),
             double_jump_charged: false,
             gun: OnReady::from_node("Sprite2D/Gun"),
-            shot_timer: OnReady::from_node("ShootTimer"),
+            shot_animation: OnReady::from_node("ShotAnimation"),
         }
     }
 
@@ -95,15 +95,15 @@ impl ICharacterBody2D for Player {
         // Action
         let mut is_shooting = false;
         if Input::singleton().is_action_just_pressed("shoot") {
-            is_shooting = self.gun.bind().try_shoot(self.sprite.get_scale().x);
+            is_shooting = self.gun.bind_mut().try_shoot(self.sprite.get_scale().x);
         }
         // Play animation
         let animation = self.get_new_animation(is_shooting);
         // Will not be interrupted by other actions
-        let is_shot_timer_stopped = self.shot_timer.is_stopped();
+        let is_shot_timer_stopped = self.shot_animation.is_stopped();
         if animation != self.animation_player.get_current_animation() && is_shot_timer_stopped {
             if is_shooting {
-                self.shot_timer.start();
+                self.shot_animation.start();
             }
             self.animation_player.set_current_animation(&animation);
             self.animation_player.play();
