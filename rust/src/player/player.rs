@@ -16,7 +16,7 @@ enum State {
 
 const WALK_SPEED: f32 = 300.0;
 const ACCELERATION_SPEED: f32 = WALK_SPEED * 6.0;
-const JUMP_VELOCITY: f32 = -339.0;
+const JUMP_VELOCITY: f32 = -725.0;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody2D)]
@@ -142,7 +142,7 @@ impl Player {
     }
 
     fn get_new_animation(&self, is_shooting: bool) -> GString {
-        let mut animation = if self.base().is_on_floor() {
+        let mut animation = if let State::Floor = self.state {
             if self.base().get_velocity().abs().x > 0.1 {
                 "run".to_string()
             } else {
