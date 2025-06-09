@@ -46,6 +46,9 @@ impl ICharacterBody2D for Enemy {
                 if self.base().get_velocity().is_zero_approx() {
                     velocity.x = WALK_SPEED;
                 }
+                if self.base().is_on_wall() {
+                    velocity.x = -velocity.x;
+                }
             }
             State::DEAD => {
                 todo!();
