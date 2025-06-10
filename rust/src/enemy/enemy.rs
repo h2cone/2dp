@@ -50,9 +50,7 @@ impl ICharacterBody2D for Enemy {
                     velocity.x = -velocity.x;
                 }
             }
-            State::DEAD => {
-                todo!();
-            }
+            State::DEAD => {}
         }
 
         self.base_mut().set_velocity(velocity);
@@ -87,5 +85,10 @@ impl Enemy {
         } else {
             GString::from("destroy")
         }
+    }
+
+    pub fn destroy(&mut self) {
+        self.state = State::DEAD;
+        self.base_mut().set_velocity(Vector2::ZERO);
     }
 }

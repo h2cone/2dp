@@ -120,28 +120,10 @@ function Restart-Godot {
         # Start the process without -Wait first
         $buildProcess = Start-Process -FilePath "cargo" -ArgumentList "build", "--manifest-path", "./rust/Cargo.toml" -NoNewWindow -PassThru
         
-        # Add timeout and better monitoring
-        $timeoutSeconds = 60  # Reduced to 1 minute timeout for primary method
-        $startTime = Get-Date
-        
-        Write-Host "Waiting for cargo build to complete (timeout: $timeoutSeconds seconds)..."
+        Write-Host "Waiting for cargo build to complete..."
         
         while (-not $buildProcess.HasExited) {
             Start-Sleep -Milliseconds 500
-            
-            # Check for timeout
-            $elapsedTime = (Get-Date) - $startTime
-            if ($elapsedTime.TotalSeconds -gt $timeoutSeconds) {
-                Write-Host "Primary build method timed out after $timeoutSeconds seconds. Terminating and trying alternative method..."
-                $buildProcess.Kill()
-                $buildProcess.WaitForExit(5000)  # Wait up to 5 seconds for cleanup
-                break
-            }
-            
-            # Show progress every 10 seconds
-            if (($elapsedTime.TotalSeconds % 10) -lt 0.5) {
-                Write-Host "Build still in progress... (elapsed: $([int]$elapsedTime.TotalSeconds)s)"
-            }
         }
         
         if ($buildProcess.HasExited) {
