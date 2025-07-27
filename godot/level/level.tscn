@@ -1,8 +1,23 @@
 [gd_scene load_steps=7 format=4 uid="uid://bm8pap1aasolp"]
 
-[ext_resource type="TileSet" uid="uid://baqxa0r57sv5n" path="res://levels/tileset.tres" id="1_s0nym"]
+[ext_resource type="TileSet" uid="uid://baqxa0r57sv5n" path="res://level/tileset.tres" id="1_s0nym"]
 [ext_resource type="PackedScene" uid="uid://bv80jcxpc6ump" path="res://enemy/enemy.tscn" id="2_ivbo6"]
-[ext_resource type="PackedScene" uid="uid://b4mw80qtqloqf" path="res://levels/platforms/platform.tscn" id="3_07r32"]
+[ext_resource type="PackedScene" uid="uid://b4mw80qtqloqf" path="res://level/platforms/platform.tscn" id="3_07r32"]
+
+[sub_resource type="Animation" id="Animation_3yy2d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-28, 645)]
+}
 
 [sub_resource type="Animation" id="Animation_07r32"]
 resource_name = "move"
@@ -21,28 +36,13 @@ tracks/0/keys = {
 "values": [Vector2(-28, 645), Vector2(-28, 350), Vector2(-28, 645)]
 }
 
-[sub_resource type="Animation" id="Animation_3yy2d"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-28, 645)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3yy2d"]
 _data = {
 &"RESET": SubResource("Animation_3yy2d"),
 &"move": SubResource("Animation_07r32")
 }
 
-[node name="Level00" type="Level00"]
+[node name="Level00" type="Node2D"]
 process_mode = 1
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -67,3 +67,5 @@ libraries = {
 &"": SubResource("AnimationLibrary_3yy2d")
 }
 autoplay = "move"
+
+[node name="Coins" type="Node" parent="."]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvxl1b3ch7gj1"
-path="res://.godot/imported/tiles.webp-e61205d25a35ee5368726a09254062e6.ctex"
+uid="uid://kw52a77e3d6t"
+path="res://.godot/imported/moving_platform.webp-824eb0b4847e7f3addce4f7937b2372d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/tiles.webp"
-dest_files=["res://.godot/imported/tiles.webp-e61205d25a35ee5368726a09254062e6.ctex"]
+source_file="res://level/platforms/moving_platform.webp"
+dest_files=["res://.godot/imported/moving_platform.webp-824eb0b4847e7f3addce4f7937b2372d.ctex"]
 
 [params]
 

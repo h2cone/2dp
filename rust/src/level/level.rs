@@ -2,12 +2,12 @@ use godot::{classes::Camera2D, prelude::*};
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
-pub struct Level00 {
+pub struct Level {
     base: Base<Node2D>,
 }
 
 #[godot_api]
-impl INode2D for Level00 {
+impl INode2D for Level {
     fn init(base: Base<Node2D>) -> Self {
         Self { base }
     }

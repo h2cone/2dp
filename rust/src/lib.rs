@@ -2,7 +2,7 @@ use godot::prelude::*;
 
 mod enemy;
 mod game;
-mod levels;
+mod level;
 mod player;
 
 struct MyExtension;
