@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://bm8pap1aasolp"]
+[gd_scene load_steps=8 format=4 uid="uid://bm8pap1aasolp"]
 
 [ext_resource type="TileSet" uid="uid://baqxa0r57sv5n" path="res://level/tileset.tres" id="1_s0nym"]
 [ext_resource type="PackedScene" uid="uid://bv80jcxpc6ump" path="res://enemy/enemy.tscn" id="2_ivbo6"]
 [ext_resource type="PackedScene" uid="uid://b4mw80qtqloqf" path="res://level/platforms/platform.tscn" id="3_07r32"]
+[ext_resource type="PackedScene" uid="uid://d1476hoh6f1qb" path="res://level/coin.tscn" id="4_vkbyq"]
 
 [sub_resource type="Animation" id="Animation_3yy2d"]
 length = 0.001
@@ -69,3 +70,8 @@ libraries = {
 autoplay = "move"
 
 [node name="Coins" type="Node" parent="."]
+
+[node name="CoinsHorizontal1" type="Node2D" parent="Coins"]
+position = Vector2(700, 610)
+
+[node name="Coin" parent="Coins/CoinsHorizontal1" instance=ExtResource("4_vkbyq")]
