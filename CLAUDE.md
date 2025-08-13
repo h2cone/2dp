@@ -63,3 +63,6 @@ godot --path ./godot
 - All game entities use Godot's node system with Rust implementing the logic
 - Animation states are controlled via AnimationPlayer nodes in scenes
 - Audio effects are triggered through AudioStreamPlayer2D nodes
+- Player uses state machine pattern with Air/Floor states and supports double jump
+- Enemy AI uses simple wall collision detection for direction changes
+- Coins use Area2D collision detection with animation triggers
